@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JS Drum Kit</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+
+  <div class="keys">
+    <div data-key="65" class="key">
+      <kbd>A</kbd>
+      <span class="sound">clap</span>
+    </div>
+    <div data-key="83" class="key">
+      <kbd>S</kbd>
+      <span class="sound">hihat</span>
+    </div>
+    <div data-key="68" class="key">
+      <kbd>D</kbd>
+      <span class="sound">kick</span>
+    </div>
+    <div data-key="70" class="key">
+      <kbd>F</kbd>
+      <span class="sound">openhat</span>
+    </div>
+    <div data-key="71" class="key">
+      <kbd>G</kbd>
+      <span class="sound">boom</span>
+    </div>
+    <div data-key="72" class="key">
+      <kbd>H</kbd>
+      <span class="sound">ride</span>
+    </div>
+    <div data-key="74" class="key">
+      <kbd>J</kbd>
+      <span class="sound">snare</span>
+    </div>
+    <div data-key="75" class="key">
+      <kbd>K</kbd>
+      <span class="sound">tom</span>
+    </div>
+    <div data-key="76" class="key">
+      <kbd>L</kbd>
+      <span class="sound">tink</span>
+    </div>
+  </div>
+
+  <audio data-key="65" src="sounds/clap.wav"></audio>
+  <audio data-key="83" src="sounds/hihat.wav"></audio>
+  <audio data-key="68" src="sounds/kick.wav"></audio>
+  <audio data-key="70" src="sounds/openhat.wav"></audio>
+  <audio data-key="71" src="sounds/boom.wav"></audio>
+  <audio data-key="72" src="sounds/ride.wav"></audio>
+  <audio data-key="74" src="sounds/snare.wav"></audio>
+  <audio data-key="75" src="sounds/tom.wav"></audio>
+  <audio data-key="76" src="sounds/tink.wav"></audio>
+
+<script>
+
+function playSound(e) {
+  // Get the first element in the document with the class in the brackets
+  // Variables defined with const cannot be redclared, or reassigned 
+  const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+  // Select the corresponding key that is with the audio
+  const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+  // If no (!) audio then stop the function from running 
+  if(!audio) return; 
+  // rewind to the start - allows you to play the key multiple times in succession
+  audio.currentTime = 0;
+  // play the audio for the corresponding key
+  audio.play();
+  // Add the class 'playing' to the key class
+  key.classList.add('playing');
+}
+
+function removeTransition(e) {
+  // skip if its not a transorm property. propertyName returns the name of the CSS property associatied with the transition
+  if(e.propertyName !== 'transform') return;
+  this.classList.remove('playing');
+}
+
+const keys = document.querySelectorAll('.key');
+// The forEach() method calls a function once for each element in an array, in order.
+// => allow us to write shorter function syntax, the 'key' is the parameter and the second part is the action of the function.
+// each key gets an event listener added to it, when a transition is ending we will remove it
+keys.forEach(key => key.addEventListener('transitionend', removeTransition));
+// Window represents the browsers window
+// Listen for the keydown event, when that happens we're goin gto run the function playSound
+window.addEventListener('keydown', playSound);
+// hello
+</script>
+</body>
+</html>
